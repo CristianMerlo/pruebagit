@@ -1,15 +1,54 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="es">
 <head>
-     <meta charset = "UTF-8">
-     <title> Cursos de Alura </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Técnico de Mantenimiento - Mostaza</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-     <ul>
-         <li> Vagrant </li>
-         <li> Docker </li>
-         <li> Ansible </li>
-         <li> Integración Continua </li>
-     </ul>
+    <header>
+        <img src="erasebg-transformed.png" alt="Mostaza Logo" id="company-logo">
+        <h1>Test para Técnicos de Mantenimiento</h1>
+    </header>
+
+    <main>
+        <div id="assessment-container">
+            <div id="info-bar">
+                <div>Tiempo Restante: <span id="timer">02:00:00</span></div>
+                <div>Pregunta: <span id="current-question-number">1</span> de <span id="total-questions">54</span></div>
+            </div>
+
+            <div id="question-area">
+                <h3 id="question-text" class="question-text">Cargando pregunta...</h3>
+                <div class="image-placeholder" id="question-image-placeholder" style="display:none;">
+                    <p><strong>Referencia visual para esta pregunta:</strong></p>
+                    <p id="image-description"></p>
+                </div>
+                <ul id="options-list" class="options-list">
+                    <!-- Options will be dynamically inserted here by JavaScript -->
+                </ul>
+            </div>
+
+            <div id="navigation-bar">
+                <button id="prev-btn" disabled>Anterior</button>
+                <button id="next-btn">Siguiente</button>
+                <button id="submit-btn" style="display:none;">Finalizar Examen</button>
+            </div>
+        </div>
+
+        <div id="results-container" style="display:none;">
+            <h2>Resultados del Examen</h2>
+            <p>Respuestas Correctas: <span id="score">0</span> / <span id="total-scorable-questions">53</span></p>
+            <p>Calificación: <span id="qualification"></span></p>
+            <!-- Optional: Add a div here for detailed results if desired: <div id="detailed-results-list"></div> -->
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Mostaza - Evaluación Técnica</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
