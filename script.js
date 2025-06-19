@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', startTest);
+document.addEventListener('DOMContentLoaded', initializeApp);
 
 const questions = [
     { id: 1, text: "¿Como se invierte la rotación en un motor trifásico?", options: [{value: "A", text: "Revertir Polea"}, {value: "B", text: "Cambiar toma corriente."}, {value: "C", text: "Invertir dos (2) de las alimentaciones (R-S-T)"}, {value: "D", text: "No se puede revertir"}], correctAnswer: "C", image_based: false, image_description: null, requires_manual_grading: false },
@@ -57,6 +57,9 @@ const questions = [
     { id: 54, text: "Con la regulación correspondiente a la carga, cambia de estado los contactos auxiliares (NC y NO) protegiendo el equipo. Esta es la función de un:", options: [{value: "A", text: "Contactor ."}, {value: "B", text: "Disyuntor."}, {value: "C", text: "Relevo térmico."}, {value: "D", text: "Ninguna de las anteriores."}], correctAnswer: "C", image_based: false, image_description: null, requires_manual_grading: false }
 ];
 
+let technicianName = '';
+let technicianLastName = '';
+
 let currentQuestionIndex = 0;
 let score = 0;
 let userAnswers = {}; // Using an object to store answers by question ID
@@ -68,6 +71,7 @@ let questionTextEl, optionsListEl, currentQuestionNumberEl, totalQuestionsEl, ti
 let prevBtn, nextBtn, submitBtn;
 let assessmentContainer, resultsContainer, scoreEl, qualificationEl, imagePlaceholderEl, imageDescriptionEl;
 let totalScorableQuestionsEl;
+let userInfoForm, techNameInput, techLastNameInput, startExamBtn, resultTechNameEl, detailedQuestionFeedbackEl;
 
 function initializeDomElements() {
     questionTextEl = document.getElementById('question-text');
@@ -85,10 +89,40 @@ function initializeDomElements() {
     imagePlaceholderEl = document.getElementById('question-image-placeholder');
     imageDescriptionEl = document.getElementById('image-description');
     totalScorableQuestionsEl = document.getElementById('total-scorable-questions');
+
+    // New elements for user info and detailed results
+    userInfoForm = document.getElementById('user-info-form');
+    techNameInput = document.getElementById('tech-name');
+    techLastNameInput = document.getElementById('tech-lastname');
+    startExamBtn = document.getElementById('start-exam-btn');
+    resultTechNameEl = document.getElementById('result-tech-name');
+    detailedQuestionFeedbackEl = document.getElementById('detailed-question-feedback');
 }
 
-function startTest() {
+function initializeApp() {
     initializeDomElements();
+    if (assessmentContainer) assessmentContainer.style.display = 'none';
+    if (resultsContainer) resultsContainer.style.display = 'none';
+    if (userInfoForm) userInfoForm.style.display = 'block';
+
+    if (startExamBtn) {
+        startExamBtn.addEventListener('click', () => {
+            if (techNameInput) technicianName = techNameInput.value.trim();
+            if (techLastNameInput) technicianLastName = techLastNameInput.value.trim();
+
+            if (!technicianName || !technicianLastName) {
+                alert("Por favor, ingrese su nombre y apellido.");
+                return;
+            }
+
+            if (userInfoForm) userInfoForm.style.display = 'none';
+            if (assessmentContainer) assessmentContainer.style.display = 'block';
+            startTestExecution();
+        });
+    }
+}
+
+function startTestExecution() {
     currentQuestionIndex = 0;
     score = 0;
     userAnswers = {};
@@ -98,14 +132,13 @@ function startTest() {
     if (totalQuestionsEl) totalQuestionsEl.textContent = questions.length;
     if (totalScorableQuestionsEl) totalScorableQuestionsEl.textContent = scorableQuestions;
 
-
     displayQuestion(currentQuestionIndex);
     startTimer();
 
-    prevBtn.addEventListener('click', previousQuestion);
-    nextBtn.addEventListener('click', nextQuestion);
-    submitBtn.addEventListener('click', submitTest);
-    optionsListEl.addEventListener('change', handleOptionSelect); // Event delegation for radio buttons
+    if (prevBtn) prevBtn.addEventListener('click', previousQuestion);
+    if (nextBtn) nextBtn.addEventListener('click', nextQuestion);
+    if (submitBtn) submitBtn.addEventListener('click', submitTest);
+    if (optionsListEl) optionsListEl.addEventListener('change', handleOptionSelect);
 }
 
 function displayQuestion(index) {
@@ -117,13 +150,13 @@ function displayQuestion(index) {
 
     questionTextEl.textContent = question.text;
     currentQuestionNumberEl.textContent = index + 1;
-    optionsListEl.innerHTML = ''; // Clear previous options
+    optionsListEl.innerHTML = '';
 
     if (question.image_based && question.image_description) {
-        imageDescriptionEl.textContent = question.image_description;
-        imagePlaceholderEl.style.display = 'block';
+        if(imageDescriptionEl) imageDescriptionEl.textContent = question.image_description;
+        if(imagePlaceholderEl) imagePlaceholderEl.style.display = 'block';
     } else {
-        imagePlaceholderEl.style.display = 'none';
+        if(imagePlaceholderEl) imagePlaceholderEl.style.display = 'none';
     }
 
     question.options.forEach(option => {
@@ -148,7 +181,6 @@ function displayQuestion(index) {
         }
     });
 
-    // Highlight selected li based on radio check
     optionsListEl.querySelectorAll('li').forEach(li => {
         const radio = li.querySelector('input[type="radio"]');
         if (radio && radio.checked) {
@@ -158,14 +190,13 @@ function displayQuestion(index) {
         }
     });
 
-
-    prevBtn.disabled = index === 0;
+    if(prevBtn) prevBtn.disabled = index === 0;
     if (index === questions.length - 1) {
-        nextBtn.style.display = 'none';
-        submitBtn.style.display = 'inline-block';
+        if(nextBtn) nextBtn.style.display = 'none';
+        if(submitBtn) submitBtn.style.display = 'inline-block';
     } else {
-        nextBtn.style.display = 'inline-block';
-        submitBtn.style.display = 'none';
+        if(nextBtn) nextBtn.style.display = 'inline-block';
+        if(submitBtn) submitBtn.style.display = 'none';
     }
 }
 
@@ -174,7 +205,6 @@ function handleOptionSelect(event) {
         const questionId = questions[currentQuestionIndex].id;
         userAnswers[questionId] = event.target.value;
 
-        // Update visual selection
         optionsListEl.querySelectorAll('li').forEach(li => li.classList.remove('selected'));
         if (event.target.checked) {
             event.target.closest('li').classList.add('selected');
@@ -200,8 +230,8 @@ function submitTest() {
     clearInterval(timerInterval);
     calculateScore();
     displayResults();
-    assessmentContainer.style.display = 'none';
-    resultsContainer.style.display = 'block';
+    if(assessmentContainer) assessmentContainer.style.display = 'none';
+    if(resultsContainer) resultsContainer.style.display = 'block';
 }
 
 function calculateScore() {
@@ -214,25 +244,85 @@ function calculateScore() {
 }
 
 function getQualification(finalScore) {
-    if (finalScore <= 24) return "Reprobado";
-    if (finalScore <= 34) return "Junior";
-    if (finalScore <= 45) return "Semi Senior";
-    return "Senior"; // More than 45
+    const scorableQuestionsCount = questions.filter(q => !q.requires_manual_grading).length;
+    const percentage = scorableQuestionsCount > 0 ? (finalScore / scorableQuestionsCount) * 100 : 0;
+
+    if (percentage < 45) return "Reprobado"; // Menos del 45%
+    if (percentage < 65) return "Junior"; // 45% a 64%
+    if (percentage < 85) return "Semi Senior"; // 65% a 84%
+    return "Senior"; // 85% o más
 }
 
 function displayResults() {
+    if (resultTechNameEl) {
+        resultTechNameEl.textContent = `${technicianName} ${technicianLastName}`;
+    }
+
     const scorableQuestionsCount = questions.filter(q => !q.requires_manual_grading).length;
     if (scoreEl) scoreEl.textContent = `${score} / ${scorableQuestionsCount}`;
     if (qualificationEl) qualificationEl.textContent = getQualification(score);
-    // Optional: Implement detailed results display here
+
+    if (detailedQuestionFeedbackEl) {
+        detailedQuestionFeedbackEl.innerHTML = '<h3>Detalle de Respuestas:</h3>';
+        const ul = document.createElement('ul');
+        ul.style.listStyleType = 'none';
+        ul.style.paddingLeft = '0';
+
+        questions.forEach((question, index) => {
+            const li = document.createElement('li');
+            li.style.marginBottom = '15px';
+            li.style.padding = '10px';
+            li.style.border = '1px solid #eee';
+            li.style.borderRadius = '4px';
+
+            let indicatorColor = '#888';
+            let statusText = 'No respondida';
+            const userAnswer = userAnswers[question.id];
+
+            if (question.requires_manual_grading) {
+                indicatorColor = '#f0ad4e';
+                statusText = 'Revisión manual';
+            } else if (userAnswer !== undefined) {
+                if (userAnswer === question.correctAnswer) {
+                    indicatorColor = '#5cb85c';
+                    statusText = 'Correcta';
+                } else {
+                    indicatorColor = '#d9534f';
+                    statusText = 'Incorrecta';
+                }
+            }
+
+            let questionTextSnippet = question.text.length > 70 ? question.text.substring(0, 70) + "..." : question.text;
+            const userAnswerText = userAnswer !== undefined ? (question.options.find(opt => opt.value === userAnswer)?.text || userAnswer) : 'No respondida';
+            const correctAnswerText = (!question.requires_manual_grading && question.correctAnswer) ? (question.options.find(opt => opt.value === question.correctAnswer)?.text || question.correctAnswer) : '';
+
+            li.innerHTML = `
+                <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                    <span style="display: inline-block; width: 20px; height: 20px; border-radius: 50%; background-color: ${indicatorColor}; margin-right: 10px; flex-shrink: 0;"></span>
+                    <strong style="margin-right: 5px;">Pregunta ${index + 1}:</strong> ${questionTextSnippet}
+                </div>
+                <div style="padding-left: 30px; font-size: 0.9em;">
+                    Tu respuesta: ${userAnswerText} <br>
+                    ${correctAnswerText ? `Respuesta correcta: ${correctAnswerText}` : ''}
+                    <em>(${statusText})</em>
+                </div>
+            `;
+            ul.appendChild(li);
+        });
+        detailedQuestionFeedbackEl.appendChild(ul);
+    }
 }
 
 function startTimer() {
     timerInterval = setInterval(() => {
         timeRemaining--;
-        const minutes = Math.floor(timeRemaining / 60);
+        const hours = Math.floor(timeRemaining / 3600);
+        const minutes = Math.floor((timeRemaining % 3600) / 60);
         const seconds = timeRemaining % 60;
-        if (timerEl) timerEl.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+        if (timerEl) {
+             timerEl.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
 
         if (timeRemaining <= 0) {
             clearInterval(timerInterval);

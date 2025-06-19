@@ -8,12 +8,24 @@
 </head>
 <body>
     <header>
-        <img src="erasebg-transformed.png" alt="Mostaza Logo" id="company-logo">
         <h1>Test para Técnicos de Mantenimiento</h1>
     </header>
 
     <main>
-        <div id="assessment-container">
+        <div id="user-info-form">
+            <h2>Información del Técnico</h2>
+            <div>
+                <label for="tech-name">Nombre:</label>
+                <input type="text" id="tech-name" name="tech-name" required>
+            </div>
+            <div>
+                <label for="tech-lastname">Apellido:</label>
+                <input type="text" id="tech-lastname" name="tech-lastname" required>
+            </div>
+            <button id="start-exam-btn">Comenzar Examen</button>
+        </div>
+
+        <div id="assessment-container" style="display:none;">
             <div id="info-bar">
                 <div>Tiempo Restante: <span id="timer">02:00:00</span></div>
                 <div>Pregunta: <span id="current-question-number">1</span> de <span id="total-questions">54</span></div>
@@ -39,9 +51,14 @@
 
         <div id="results-container" style="display:none;">
             <h2>Resultados del Examen</h2>
+            <p>Técnico: <span id="result-tech-name"></span></p>
             <p>Respuestas Correctas: <span id="score">0</span> / <span id="total-scorable-questions">53</span></p>
             <p>Calificación: <span id="qualification"></span></p>
             <!-- Optional: Add a div here for detailed results if desired: <div id="detailed-results-list"></div> -->
+            <div id="detailed-question-feedback">
+                <h3>Detalle de Respuestas:</h3>
+                <!-- Detailed feedback will be populated here by JavaScript -->
+            </div>
         </div>
     </main>
 

@@ -34,12 +34,6 @@ header {
     align-items: center;
 }
 
-#company-logo {
-    height: 50px;
-    width: auto;
-    margin-right: 20px;
-}
-
 header h1 {
     margin: 0;
     font-size: 1.8em;
@@ -170,3 +164,98 @@ header h1 {
     font-weight: bold;
     color: #D32F2F; /* Button Red / Accent Red */
 }
+
+/* Styles for User Info Form */
+#user-info-form {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+#user-info-form h2 {
+    color: #CC0000; /* Primary Red */
+    margin-top: 0;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+#user-info-form div {
+    margin-bottom: 15px;
+}
+
+#user-info-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+#user-info-form input[type="text"] {
+    width: calc(100% - 22px); /* Account for padding and border */
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+#user-info-form input[type="text"]:focus {
+    border-color: #CC0000; /* Primary Red */
+    outline: none;
+    box-shadow: 0 0 5px rgba(204,0,0,0.2);
+}
+
+#start-exam-btn {
+    display: block;
+    width: 100%;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    color: #FFFFFF;
+    background-color: #D32F2F; /* Button Red */
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 20px;
+}
+
+#start-exam-btn:hover {
+    background-color: #B71C1C; /* Darker Red on hover */
+}
+
+/* Styles for Detailed Question Feedback */
+#detailed-question-feedback {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+#detailed-question-feedback h3 {
+    color: #CC0000; /* Primary Red */
+    margin-bottom: 15px;
+}
+
+/* Individual feedback item styling is handled by inline styles in JS for dynamic coloring,
+   but we can add some base styling for the list items if needed.
+   The JS already adds:
+   ul.style.listStyleType = 'none';
+   ul.style.paddingLeft = '0';
+   li.style.marginBottom = '15px';
+   li.style.padding = '10px';
+   li.style.border = '1px solid #eee';
+   li.style.borderRadius = '4px';
+*/
+
+/* If specific class is added to the indicator span, it could be styled here too.
+   For example, if the span had a class like 'traffic-light-indicator':
+.traffic-light-indicator {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    margin-right: 10px;
+    flex-shrink: 0;
+}
+   However, the JS currently applies inline styles directly for the background-color.
+*/
